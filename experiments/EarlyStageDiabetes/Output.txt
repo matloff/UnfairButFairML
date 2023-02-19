@@ -1,0 +1,20 @@
+
+                             overallBaseAcc 
+                                 0.38115385 
+                            overallAccWithS 
+                                 0.11038462 
+                          overallAccWithNoS 
+                                 0.14115385 
+             MLrunWithinClassTestAcc.Female 
+                                 0.08736842 
+               MLrunWithinClassTestAcc.Male 
+                                 0.16250000 
+  predAccsEachClassUsingOverallWithS.Female 
+                                 0.06437500 
+    predAccsEachClassUsingOverallWithS.Male 
+                                 0.11426829 
+predAccsEachClassUsingOverallWithNoS.Female 
+                                 0.11677083 
+  predAccsEachClassUsingOverallWithNoS.Male 
+                                 0.12804878 
+
