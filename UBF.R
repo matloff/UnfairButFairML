@@ -26,6 +26,7 @@ UBF <- function(data,yName,sName,qeFtnName)
    allY <- data[,yCol]  # Y for full data set
    if (is.factor(allY) && length(levels(allY)) != 2)
       stop('in classification cases, only 2-class case is allowed')
+   classif <- is.factor(allY) 
    sCol <- which(names(data) == sName)
    allS <- data[,sCol]  # S for full data set
    if (!is.factor(allS)) stop('S must be a factor')
@@ -81,12 +82,15 @@ UBF <- function(data,yName,sName,qeFtnName)
       thisData <- tmp
       tmp <- predict(overallFitWithS,thisData)
       predAccsEachClassUsingOverallWithS[[slvl]] <- 
-         mean(tmp$predClasses != data[rowNums,yCol])
+         if(classif) mean(tmp$predClasses != data[rowNums,yCol]) else
+         mean(abs(tmp - data[rowNums,yCol])) 
+
       tmp <- allXnoS[rowNumsEachClass[[slvl]],]
       thisData <- tmp
       tmp <- predict(overallFitWithNoS,thisData)
       predAccsEachClassUsingOverallWithNoS[[slvl]] <- 
-         mean(tmp$predClasses != data[rowNums,yCol])
+         if(classif) mean(tmp$predClasses != data[rowNums,yCol]) else
+         mean(abs(tmp - data[rowNums,yCol])) 
 
    }
 
