@@ -48,7 +48,7 @@ UBF <- function(data,yName,sName,qeFtnName)
       tmp <- predict(overallFitWithS,thisData)
       predAccsEachClassUsingOverallWithS[[slvl]] <- 
          mean(tmp$predClasses != data[rowNums,yCol])
-      tmp <- allX[rowNumsEachClass[[slvl]],-sCol]
+      tmp <- allXnoS[rowNumsEachClass[[slvl]],]
       thisData <- tmp
       tmp <- predict(overallFitWithNoS,thisData)
       predAccsEachClassUsingOverallWithNoS[[slvl]] <- 
