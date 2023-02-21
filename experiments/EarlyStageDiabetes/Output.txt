@@ -1,20 +1,43 @@
 
+>  set.seed(9999)
+> replicMeans(250,"unlist(UBF(z,'class','Gender','qeLogit'))")
+
                              overallBaseAcc 
-                                 0.38115385 
+                                 0.38393162 
                             overallAccWithS 
-                                 0.11038462 
+                                 0.07700000 
                           overallAccWithNoS 
-                                 0.14115385 
+                                 0.13123077 
              MLrunWithinClassTestAcc.Female 
-                                 0.08736842 
+                                 0.05305263 
                MLrunWithinClassTestAcc.Male 
-                                 0.16250000 
+                                 0.08112500 
   predAccsEachClassUsingOverallWithS.Female 
-                                 0.06437500 
+                                 0.05516667 
     predAccsEachClassUsingOverallWithS.Male 
-                                 0.11426829 
+                                 0.07280488 
 predAccsEachClassUsingOverallWithNoS.Female 
-                                 0.11677083 
+                                 0.14029167 
   predAccsEachClassUsingOverallWithNoS.Male 
-                                 0.12804878 
+                                 0.09592683 
+attr(,"stderr")
+                             overallBaseAcc 
+                               0.0004412327 
+                            overallAccWithS 
+                               0.0021950091 
+                          overallAccWithNoS 
+                               0.0026524657 
+             MLrunWithinClassTestAcc.Female 
+                               0.0036657993 
+               MLrunWithinClassTestAcc.Male 
+                               0.0027043607 
+  predAccsEachClassUsingOverallWithS.Female 
+                               0.0003782858 
+    predAccsEachClassUsingOverallWithS.Male 
+                               0.0004598852 
+predAccsEachClassUsingOverallWithNoS.Female 
+                               0.0008589235 
+  predAccsEachClassUsingOverallWithNoS.Male 
+                               0.0007797758 
+There were 50 or more warnings (use warnings() to see the first 50)
 
