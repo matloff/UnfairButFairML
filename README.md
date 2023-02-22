@@ -5,7 +5,7 @@
 
 Today's rapidly increasing interest in the fairness of machine learning
 (ML) algorithms is easily explained using the "Hello World" of fair ML,
-the COMPAS project.  [**Pro Publica**
+the COMPAS project.  A [**Pro Publica**
 article](https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing)
 investigated COMPAS, an ML algorithm designed to predict recidivism by
 those convicted of crimes.  The article found the tool to be racially
@@ -14,14 +14,19 @@ sentencing convicts.  The developers of the
 algorithm later offered a rebuttal of the criticism, but in any case,
 COMPAS well illustrates the basic issues.
 
-Here, though, we revisit the basic issue of "fairness."
+## Goals of this note
+
+Here, though, we revisit the basic issue of "fairness."  We also show
+that the approach here can lead to more accurate ML predictions in
+general, apart from the fairness issue.
 
 ## Notation
 
 We are using a feature vector X to predict Y. The components of X
 include a set S of sensitive variables such as race or gender, and
 possibly a set C of variables that are not directly sensitive but are
-correlated strongly enough with S to divulge information about S.
+correlated strongly enough with S to divulge information about S
+even if S is omitted from the analysis.
 
 ## Should S be used in prediction?
 
@@ -61,52 +66,78 @@ algorithm:
 > calculations could steer minority patients, deemed to be at higher risk,
 > away from surgery.
 
-## But, who is harmed?
+## But, is "unfair" ML necessarily harmful??
 
 A criminal defendant who is unfairly given a longer sentence
 due to his race is clearly harmed.  A patient who is unreasonably denied
-needed surgery is also harmed.  But let's take this second example further,
+needed surgery due to their race or gender is also harmed.  But let's take this second example further,
 not just for surgery but also for risky treatments, expensive drugs and
 so on.
 
-**Doesn't the patient have a right to know what her risks are?**
-Indeed, the Health Insurance Portability and Accountability Act gives
-patients the right to access their medical information, and arguably
-this extends to a patient's right to have the most accurate medical diagnosis
-possible for her personal situation.  This may necessitate using her
-race and gender in the analysis.
+**Doesn't the patient have a right to a FULL assessment of his/her risks of
+undergoing surgery, consuming drugs with serious side effects and so
+on?**  Again, the patient has a right to a FULL assessment, one that
+takes into account race, gender or whatever.  Indeed, the Health
+Insurance Portability and Accountability Act gives patients the right to
+access their medical information, and arguably this extends to a
+patient's right to have the most accurate medical diagnosis possible for
+the patient's personal situation.  This may necessitate using the
+patient's race and gender in the analysis.
 
 The "legal and policy concerns" cited above by Gaebler *et al* are
 motivated by a desire to *protect* individuals in a minority or oppressed
 class.  But in our setting here, withholding the most accurate diagnosis
-possible is making such a patient a victim, not protecting her.
+possible is making such a patient a *victim*, not protecting him/her.
+
+In other words, so-called "unfair" ML, in taking race and gender into
+account, **is actually FAIR** in this setting.  *Current definitions of
+fairness are overly restrictive, bringing harm to all.*
 
 We will return to this issue shortly.  But first, a crucial technical
 point:
 
 ## Tradeoffs
 
-Analogous to the famous Bias-Variance Tradeoff, fair ML researchers
-speak in terms of the Fairness-Utility Tradeoff.  "Utility" here refers
-basically to predictive power.  The issue is that attempts at fairness
-may reduce predictive power, as such methods may eliminate or weaken the
-impact of important features.
+Fair ML researchers speak of a Fairness-Utility Tradeoff, a term
+inspired by the famous Bias-Variance Tradeoff.  It is seldom mentioned,
+though, that the Bias-Variance Tradeoff has implications for the
+Fairness-Utility Tradeoff.  Here's how:
 
-It is seldom mentioned, though, that the Bias-Variance Tradeoff comes
-into play as well.  Available data is always noisy, whether one views it in
-statistical terms (a sample from some possibly conceptual population) or
-from an ML point of view (finite data from some probabilistic generating
-process).  All ML algorithms are subject to this problem, and generally
-the more features in one's model, the higher the variability of
-predictions, in spite of lower bias.  Thus:
+* The Bias-Variance Tradeoff says that the *bias* of a
+prediction--an inherent skewing that would persist even if the data set
+were far larger--is at odds with the *variance*, the variability of the
+prediction from one version of the dataset to another of the same size.
+(E.g. in a diabetes study involving 1000 patients, we might think of
+them as being sampled from the conceptual population of all diabetics,
+and there are many possible datasets of 1000 such patients.)
+More complex models have smaller bias but larger variance.  One
+generally tries to find a "happy medium" betwen the two.
 
-* It may not be desirable from the point of view of prediction accuracy
-  to use the features in S even if fairness were not an issue.
+    In our context here, mocels that use S and C are more complex than
+    those that don't.  (Unfairness mitigation algorithms, that use S and C
+    but in reduced form, are in the middle.)
 
-* The same is true for the features in C.
+* The Fairness/Utility Tradeoff notes that fairness is at odds with
+"utility," meaning predictive power.  The greater the degree to which S
+and C are suppressed in an analyis, i.e. the fairer, the worse the
+prediction accuracy.
 
-* And indeed, our estimates of how closely the features in C are
-  correlated with those in S may themselves not be very accurate.
+The Bias-Variance is relevant in our setting here, as it affects
+Utility.  Some implications:
+
+* Even if S and C could be used in a fair manner, e.g. in the settings
+  discussed above, it may not be desirable to do so.  The reduction in
+bias may not be large enough to compensate for the increase in variance,
+thus reducing Utility.
+
+* On the other hand, omitting or reducing the use of S and C may results
+  in a substantial increase in bias, possibly dominating a small
+reduction in variance, thus reducing Utility.
+
+* This suggests a hybrid approach:  If S and C can be used fully and
+  fairly, it may be the case that a hybrid approach is best, with S and
+C being taken into account for some S classes (e.g. women) but not
+others (e.g. men).
 
 ## Putting this all together: an example dataset
 
@@ -146,7 +177,7 @@ So, the "traditional" approach, in which S is excluded, did
 substantially worse among women, compared to the class-specific
 analyses.  Men were largely unaffected.
 
-## Discussion
+## Discussion of the fair ML issue
 
 * We did not try any bias mitigation methods, which could possibly have
   reduced the gap between using or not using S (though possibly
@@ -167,3 +198,6 @@ analyses.  Men were largely unaffected.
   Bias-Variance Tradeoff.  Cross-validation, informed by medical domain
   expertise, may be used to evaluate whether a class-specific or overall
   anaysis is better for a particular class.
+
+## General usefulness, outside the fair ML realm
+
